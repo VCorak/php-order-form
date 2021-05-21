@@ -10,7 +10,6 @@
     <title>Order food & drinks</title>
 </head>
 <body>
-
 <div class="container">
     <h1>Order food in restaurant "the Personal Ham Processors"</h1>
     <nav>
@@ -23,13 +22,11 @@
             </li>
         </ul>
     </nav>
-
-    <form method="post" name="order">
+    <form method="post">
         <div class="form-row">
             <div class="form-group col-md-6">
                 <label for="email">E-mail:</label>
-                <input type="text" id="email" name="email" class="form-control" value="<?php echo $email?>">
-
+                <input type="text" id="email" name="email" class="form-control"/>
             </div>
             <div></div>
         </div>
@@ -40,30 +37,24 @@
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label for="street">Street:</label>
-                    <input type="text" name="street" id="street" class="form-control" value="<?php echo $street?>">
-
+                    <input type="text" name="street" id="street" class="form-control">
                 </div>
                 <div class="form-group col-md-6">
                     <label for="streetnumber">Street number:</label>
-                    <input type="text" id="streetnumber" name="streetnumber" class="form-control" value="<?php echo $number?>">
-
+                    <input type="text" id="streetnumber" name="streetnumber" class="form-control">
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label for="city">City:</label>
-                    <input type="text" id="city" name="city" class="form-control" value="<?php echo $city?>">
-
+                    <input type="text" id="city" name="city" class="form-control">
                 </div>
                 <div class="form-group col-md-6">
                     <label for="zipcode">Zipcode</label>
-                    <input type="text" id="zipcode" name="zipcode" class="form-control" value="<?php echo $zipCode?>">
-
+                    <input type="text" id="zipcode" name="zipcode" class="form-control">
                 </div>
             </div>
         </fieldset>
-
-
 
         <fieldset>
             <legend>Products</legend>
@@ -85,13 +76,10 @@
     <footer>You already ordered <strong>&euro; <?php echo $totalValue ?></strong> in food and drinks.</footer>
 </div>
 
-
-
 <style>
     footer {
         text-align: center;
     }
-
 </style>
 </body>
 </html>
