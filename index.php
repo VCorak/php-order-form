@@ -48,12 +48,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // define variables and set to empty values
     $emailErr = $streetErr = $numberErr = $cityErr = $zipCodeErr = $checkedErr = "";
     $email = $street = $number = $city = $zipCode = "";
+    $alerts = [];
 
 
 
     // E_MAIL
     if (empty($_POST["email"])) {
-        echo '<script>alert("Email is required")</script>';
+        echo $alerts[] = '<script>alert("Email is required")</script>';
     } else {
         $email = test_input($_POST["email"]);
         // check if e-mail address is well formatted
@@ -64,7 +65,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // ADDRESS
     if (empty($_POST["street"])) {
-        echo '<script>alert("Street is required")</script>';
+        echo $alerts[] = '<script>alert("Street is required")</script>';
     } else {
         $street = test_input($_POST["street"]);
         // check if name only contains letters and whitespace
@@ -73,7 +74,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
     if (empty($_POST["number"])) {
-        echo '<script>alert("Street number is required")</script>';
+        echo $alerts[] = '<script>alert("Street number is required")</script>';
     } else {
         $number = test_input($_POST["number"]);
         // check if name only contains numbers
@@ -82,7 +83,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
     if (empty($_POST["city"])) {
-        echo '<script>alert("City is required")</script>';
+        echo $alerts[] = '<script>alert("City is required")</script>';
     } else {
         $city = test_input($_POST["city"]);
         // check if name only contains letters and whitespace
@@ -91,7 +92,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
     if (empty($_POST["zipcode"])) {
-        echo '<script>alert("Zipcode is required")</script>';
+        echo $alerts[] = '<script>alert("Zipcode is required")</script>';
     } else {
         $zipCode = test_input($_POST["zipcode"]);
         // check if name only contains numbers
@@ -113,5 +114,8 @@ if (empty($checked)) {
     $checkedErr = "You didn't make an order";
 }
 
+// DISPLAY SUCCESS ORDER ALERT
+
+if(empty(22))
 
 require 'form-view.php';
