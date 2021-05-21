@@ -21,6 +21,10 @@ function whatIsHappening() {
 
 
 //your products with their price.
+
+$price = [];
+$product = [];
+
 if (isset($_GET["food"]) && $_GET["food"] == 0 ) {
 $products = [
     ['name' => 'Club Ham', 'price' => 3.20],
@@ -29,6 +33,13 @@ $products = [
     ['name' => 'Club Chicken', 'price' => 4],
     ['name' => 'Club Salmon', 'price' => 5]
 ];
+
+if ($_POST["products"]) {
+    foreach ($price as $key => $product["price"]) {
+        $calc = array_sum($price);
+        var_dump($calc);
+    }
+}
 } else {
 
     $products = [
@@ -37,7 +48,9 @@ $products = [
         ['name' => 'Sprite', 'price' => 2],
         ['name' => 'Ice-tea', 'price' => 3],
     ];
-
+    if ($_POST["products"]) {
+        $totalValue = array_sum($products);
+    }
 }
 
 $totalValue = 0;
@@ -46,13 +59,13 @@ $totalValue = 0;
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // define variables and set to empty values
-    $emailErr = $streetErr = $numberErr = $cityErr = $zipCodeErr = $checkedErr = "";
-    $email = $street = $number = $city = $zipCode = "";
+
     $alerts = [];
+    $errors = $emailErr = $streetErr = $numberErr = $cityErr = $zipCodeErr = $checkedErr = "";
 
 
 
-    // E_MAIL
+    // E-MAIL
     if (empty($_POST["email"])) {
         echo $alerts[] = '<script>alert("Email is required")</script>';
     } else {
@@ -73,10 +86,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $streetErr = "Only letters and white space allowed";
         }
     }
-    if (empty($_POST["number"])) {
+    if (empty($_POST["streetnumber"])) {
         echo $alerts[] = '<script>alert("Street number is required")</script>';
     } else {
-        $number = test_input($_POST["number"]);
+        $number = test_input($_POST["streetnumber"]);
         // check if name only contains numbers
         if (!is_numeric($number)) {
             $numberErr = "Only numbers allowed";
@@ -116,6 +129,53 @@ if (empty($checked)) {
 
 // DISPLAY SUCCESS ORDER ALERT
 
-if(empty(22))
+if(empty($alerts) && empty($errors)) {
+    echo $alerts[] = '<script>alert("You successfully placed your order!")</script>';
+}
+
+function test_input($data) {
+    $data = trim($data); // Strip whitespace (or other characters) from the beginning and end of a string
+    $data = stripslashes($data); // Un-quotes a quoted string
+    $data = htmlspecialchars($data); // Convert special characters to HTML entities ( < = &lt; , ... )
+    return $data;
+}
+
+// VARIABLES
+
+$email = "";
+$street = "";
+$city = "";
+$number = "";
+$zipCode = "";
+
+if (!empty($_POST)) {
+    $_SESSION["email"] = $_POST["email"];
+    $_SESSION["street"] = $_POST["street"];
+    $_SESSION["city"] = $_POST["city"];
+    $_SESSION["streetnumber"] = $_POST["streetnumber"];
+    $_SESSION["zipcode"] = $_POST["zipcode"];
+}
+
+if (!empty($_SESSION["email"])) {
+    $email = $_SESSION["email"];
+}
+
+if (!empty($_SESSION["street"])) {
+    $street = $_SESSION["street"];
+}
+
+if (!empty($_SESSION["city"])) {
+    $city = $_SESSION["city"];
+}
+
+if (!empty($_SESSION["streetnumber"])) {
+    $number = $_SESSION["streetnumber"];
+}
+
+if (!empty($_SESSION["zipcode"])) {
+    $zipCode = $_SESSION["zipcode"];
+}
+
+
 
 require 'form-view.php';
