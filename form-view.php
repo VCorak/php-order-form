@@ -22,11 +22,72 @@
             </li>
         </ul>
     </nav>
-    <form method="post">
+    <?php
+    // define variables and set to empty values
+    $emailErr=$streetErr=$numberErr=$cityErr=$zipCodeErr="";
+    $email=$street=$number=$city=$zipCode="";
+
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        if (empty($_POST["email"])) {
+            $emailErr = "Email is required";
+        } else {
+            $email = test_input($_POST["email"]);
+            // check if e-mail adress is well formated
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $emailErr = "Invalid email format";
+            }
+        }
+        if (empty($_POST["street"])) {
+            $streetErr = "Street is required";
+        } else {
+            $street = test_input($_POST["street"]);
+            // check if name only contains letters and whitespace
+            if (!preg_match("/^[a-zA-Z-' ]*$/", $street)) {
+                $streetErr = "Only letters and white space allowed";
+            }
+        }
+        if (empty($_POST["number"])) {
+            $numberErr = "Number is required";
+        } else {
+            $number = test_input($_POST["number"]);
+            // check if name only contains numbers
+            if (!is_numeric($number)) {
+                $numberErr = "Only numbers allowed";
+            }
+        }
+        if (empty($_POST["city"])) {
+            $cityErr = "City is required";
+        } else {
+            $city = test_input($_POST["city"]);
+            // check if name only contains letters and whitespace
+            if (!preg_match("/^[a-zA-Z-' ]*$/", $city)) {
+                $cityErr = "Only letters and white space allowed";
+            }
+        }
+        if (empty($_POST["zipcode"])) {
+            $zipCodeErr = "Number is required";
+        } else {
+            $zipCode = test_input($_POST["zipcode"]);
+            // check if name only contains numbers
+            if (!is_numeric($zipCode)) {
+                $zipCodeErr = "Only numbers allowed";
+            }
+        }
+
+        function test_input($data) {
+            $data = trim($data);
+            $data = stripslashes($data);
+            $data = htmlspecialchars($data);
+            return $data;
+        }
+    }
+    ?>
+    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
         <div class="form-row">
             <div class="form-group col-md-6">
                 <label for="email">E-mail:</label>
-                <input type="text" id="email" name="email" class="form-control"/>
+                <input type="text" id="email" name="email" class="form-control" value="<?php echo $email;?>">
+                <span class="error">* <?php echo $emailErr;?></span>
             </div>
             <div></div>
         </div>
@@ -37,24 +98,46 @@
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label for="street">Street:</label>
-                    <input type="text" name="street" id="street" class="form-control">
+                    <input type="text" name="street" id="street" class="form-control" value="<?php echo $street;?>">
+                    <span class="error">* <?php echo $streetErr;?></span>
                 </div>
                 <div class="form-group col-md-6">
                     <label for="streetnumber">Street number:</label>
-                    <input type="text" id="streetnumber" name="streetnumber" class="form-control">
+                    <input type="text" id="streetnumber" name="streetnumber" class="form-control" value="<?php echo $number;?>">
+                    <span class="error">* <?php echo $numberErr;?></span>
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label for="city">City:</label>
-                    <input type="text" id="city" name="city" class="form-control">
+                    <input type="text" id="city" name="city" class="form-control" value="<?php echo $city;?>">
+                    <span class="error">* <?php echo $cityErr;?></span>
                 </div>
                 <div class="form-group col-md-6">
                     <label for="zipcode">Zipcode</label>
-                    <input type="text" id="zipcode" name="zipcode" class="form-control">
+                    <input type="text" id="zipcode" name="zipcode" class="form-control" value="<?php echo $zipCode;?>">
+                    <span class="error">* <?php echo $zipCodeErr;?></span>
                 </div>
             </div>
         </fieldset>
+
+        <?php
+        echo "<h2>Your Input:</h2>";
+        echo $email;
+        echo "<br>";
+        echo $street;
+        echo "<br>";
+        echo $number;
+        echo "<br>";
+        echo $city;
+        echo "<br>";
+        echo $zipCode;
+        ?>
+
+        <?php
+        $products = [];
+        $totalValue = "50";
+        ?>
 
         <fieldset>
             <legend>Products</legend>
