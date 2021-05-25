@@ -8,7 +8,7 @@ error_reporting(E_ALL);
 //we are going to use session variables so we need to enable sessions
 session_start();
 
-/*function whatIsHappening() {
+function whatIsHappening() {
     echo '<h2>$_GET</h2>';
     var_dump($_GET);
     echo '<h2>$_POST</h2>';
@@ -17,7 +17,7 @@ session_start();
     var_dump($_COOKIE);
     echo '<h2>$_SESSION</h2>';
     var_dump($_SESSION);
-}*/
+}
 
 
 //your products with their price.
@@ -58,7 +58,7 @@ $totalValue = 0;
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    // define variables and set to empty values
+    // define variables and set to empty arrays
 
     $alerts = [];
     $errors = [];
@@ -143,6 +143,9 @@ $nonExpress = date("H:i", strtotime("+2hours"));
 if (empty($errors)) {
 
     // CHECK THE DELIVERY TIME
+    // Checking if forms are filled in correctly
+    // If no errors, then show a success message based on which delivery option is set
+    // If error, foreach in a bootstrap alert.
     if (isset($_POST['express_delivery'])) {
         echo "<div class='alert alert-success' role='alert'>Order sent. The delivery will arrive $express</div>";
     } else {
@@ -155,7 +158,6 @@ if (empty($errors)) {
     }
 
 }
-
 
 
 // DISPLAY SUCCESS ORDER ALERT
@@ -212,7 +214,7 @@ if (!empty($errors)) {
 // DISPLAY ALERTS
 if (!empty($alerts)) {
     foreach ($alerts as $alert) {
-        echo ("<div class='alert alert-danger' role='alert'>" . $alert . "</div>");
+        echo ("<div class='alert alert-warning' role='alert'>" . $alert . "</div>");
     }
 }
 
