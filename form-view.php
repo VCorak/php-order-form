@@ -84,4 +84,4 @@
 </body>
 </html>
 
-<?php echo whatIsHappening() ?>
+<?php /*echo whatIsHappening() */?>

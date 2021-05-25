@@ -8,7 +8,7 @@ error_reporting(E_ALL);
 //we are going to use session variables so we need to enable sessions
 session_start();
 
-function whatIsHappening() {
+/*function whatIsHappening() {
     echo '<h2>$_GET</h2>';
     var_dump($_GET);
     echo '<h2>$_POST</h2>';
@@ -17,14 +17,14 @@ function whatIsHappening() {
     var_dump($_COOKIE);
     echo '<h2>$_SESSION</h2>';
     var_dump($_SESSION);
-}
+}*/
 
 
 //your products with their price.
 $productPrice = [];
 $product = [];
 
-if ($_SERVER['REQUEST_URI' ]== "/order-form-php/index.php?food=1") {
+if ($_SERVER['REQUEST_URI' ] == "/order-form-php/index.php?food=1") {
 $products = [
     ['name' => 'Club Ham', 'price' => 3.20],
     ['name' => 'Club Cheese', 'price' => 3],
@@ -40,7 +40,7 @@ if ($_POST["products"]) {
 
 } else {
 
-    if ($_SERVER['REQUEST_URI' ]== "/order-form-php/index.php?food=0")
+    if ($_SERVER['REQUEST_URI' ] == "/order-form-php/index.php?food=0")
 
     $products = [
         ['name' => 'Cola', 'price' => 2],
@@ -68,7 +68,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (empty($_POST["email"])) {
         echo $alerts[] = "Please fill in your <a href='#email' class='alert-link'>E-mail</a>!";
     } else {
-        $email = test_input($_POST["email"]);
+        $email = inputData($_POST["email"]);
         // check if e-mail address is well formatted
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $errors[] = "<a href='#email' class='alert-link'>$email</a> is not a valid email addres!";
@@ -76,10 +76,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // ADDRESS
-    $street = test_input($_POST["street"]);
-    $number = test_input($_POST["streetnumber"]);
-    $city = test_input($_POST["city"]);
-    $zipCode = test_input($_POST["zipcode"]);
+    $street = inputData($_POST["street"]);
+    $number = inputData($_POST["streetnumber"]);
+    $city = inputData($_POST["city"]);
+    $zipCode = inputData($_POST["zipcode"]);
 
     if (empty($_POST["street"])) {
         echo $alerts[] = "Please fill in your <a href='#street' class='alert-link'>street</a>!";
@@ -89,7 +89,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (empty($_POST["streetnumber"])) {
         echo $alerts[] = "Please fill in your <a href='#streetnumber' class='alert-link'>street number</a>!";
     } else {
-        $number = test_input($_POST["streetnumber"]);
+        $number = inputData($_POST["streetnumber"]);
         // check if name only contains numbers
         if (!is_numeric($number)) {
             echo $errors[] = "<a href='#streetnumber' class='alert-link'>Street Number</a> only accepts numbers!";
@@ -106,13 +106,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (empty($_POST["zipcode"])) {
         echo $alerts[] = "Please fill in your <a href='#zipcode' class='alert-link'>zipcode</a>!";
     } else {
-        $zipCode = test_input($_POST["zipcode"]);
+        $zipCode = inputData($_POST["zipcode"]);
         // check if zipcode only contains numbers
         if (!is_numeric($zipCode)) {
             $errors[] = "<a href ='#zipcode' class='alert-link'>Zipcode</a> only accepts numbers!";
         }
     }
 
+}
+
+function inputData($data) {
+    $data = trim($data); // Strip whitespace (or other characters) from the beginning and end of a string
+    $data = stripslashes($data); // Un-quotes a quoted string
+    $data = htmlspecialchars($data); // Convert special characters to HTML entities ( < = &lt; , ... )
+    return $data;
 }
 // MAKE SURE THEY ORDERED SOMETHING
 
@@ -126,14 +133,29 @@ if (empty($checked)) {
     $errors[] = "You didn't <a href ='#products' class='alert-link'>order</a> anything!";
 }
 
-if (empty($_POST['express_delivery'])) {
-   $alerts[] = "<li>You forgot to select delivery type!</li>";
-} elseif ($_POST['express_delivery'] = "5")  {
-    $alerts[] = "<li>Your order will be delivered in 45 minutes.</li>";
+
+// Setting my timezone
+date_default_timezone_set("Europe/Brussels");
+// 45 Minute Delivery
+$express = date("H:i", strtotime("+45minutes"));
+// 2 Hours Delivery
+$nonExpress = date("H:i", strtotime("+2hours"));
+if (empty($errors)) {
+
+    // CHECK THE DELIVERY TIME
+    if (isset($_POST['express_delivery'])) {
+        echo "<div class='alert alert-success' role='alert'>Order sent. The delivery will arrive $express</div>";
+    } else {
+        echo "<div class='alert alert-success' role='alert'>Order sent. The delivery will arrive $nonExpress</div>";
+    }
 } else {
-    $alerts[] = "<li>Your order will be delivered in 2 hours.</li>";
+    //  Display errors
+    foreach ($errors as $val) {
+        echo "<div class='alert alert-warning' role='alert'><span class='message'>$val</div>";
+    }
 
 }
+
 
 
 // DISPLAY SUCCESS ORDER ALERT
@@ -143,12 +165,6 @@ if(empty($alerts) && empty($errors)) {
            <p>You've successfully placed your order! Please check your mailbox.</p></div>");
 }
 
-function test_input($data) {
-    $data = trim($data); // Strip whitespace (or other characters) from the beginning and end of a string
-    $data = stripslashes($data); // Un-quotes a quoted string
-    $data = htmlspecialchars($data); // Convert special characters to HTML entities ( < = &lt; , ... )
-    return $data;
-}
 
 // VARIABLES
 
