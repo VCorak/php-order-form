@@ -57,7 +57,7 @@
         </fieldset>
 
         <fieldset>
-            <legend id="products">Products</legend>
+            <legend>Products</legend>
             <?php foreach ($products AS $i => $product): ?>
                 <label>
                     <input type="checkbox" value="1" name="products[<?php echo $i ?>]"/> <?php echo $product['name'] ?> -

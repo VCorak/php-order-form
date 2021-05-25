@@ -21,9 +21,10 @@ function whatIsHappening() {
 
 
 //your products with their price.
+$productPrice = [];
+$product = [];
 
-
-if (isset($_GET["food"]) && $_GET["food"] == 0 ) {
+if ($_SERVER['REQUEST_URI' ]== "/order-form-php/index.php?food=1") {
 $products = [
     ['name' => 'Club Ham', 'price' => 3.20],
     ['name' => 'Club Cheese', 'price' => 3],
@@ -31,8 +32,15 @@ $products = [
     ['name' => 'Club Chicken', 'price' => 4],
     ['name' => 'Club Salmon', 'price' => 5]
 ];
+if ($_POST["products"]) {
+    foreach ($productPrice as $key => $product["price"]) {
+        $calc = array_sum($productPrice);
+    }
+}
 
 } else {
+
+    if ($_SERVER['REQUEST_URI' ]== "/order-form-php/index.php?food=0")
 
     $products = [
         ['name' => 'Cola', 'price' => 2],
@@ -40,7 +48,9 @@ $products = [
         ['name' => 'Sprite', 'price' => 2],
         ['name' => 'Ice-tea', 'price' => 3],
     ];
-
+    if ($_POST['products']) {
+        $totalValue = array_sum($products);
+    }
 }
 
 $totalValue = 0;
@@ -97,7 +107,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo $alerts[] = "Please fill in your <a href='#zipcode' class='alert-link'>zipcode</a>!";
     } else {
         $zipCode = test_input($_POST["zipcode"]);
-        // check if name only contains numbers
+        // check if zipcode only contains numbers
         if (!is_numeric($zipCode)) {
             $errors[] = "<a href ='#zipcode' class='alert-link'>Zipcode</a> only accepts numbers!";
         }
@@ -115,6 +125,16 @@ $checked= $_POST["products"];
 if (empty($checked)) {
     $errors[] = "You didn't <a href ='#products' class='alert-link'>order</a> anything!";
 }
+
+if (empty($_POST['express_delivery'])) {
+   $alerts[] = "<li>You forgot to select delivery type!</li>";
+} elseif ($_POST['express_delivery'] = "5")  {
+    $alerts[] = "<li>Your order will be delivered in 45 minutes.</li>";
+} else {
+    $alerts[] = "<li>Your order will be delivered in 2 hours.</li>";
+
+}
+
 
 // DISPLAY SUCCESS ORDER ALERT
 
@@ -142,7 +162,7 @@ if (!empty($_POST)) {
     $_SESSION["email"] = $_POST["email"];
     $_SESSION["street"] = $_POST["street"];
     $_SESSION["city"] = $_POST["city"];
-    $_SESSION["streetnumber"] = $_POST["number"];
+    $_SESSION["number"] = $_POST["streetnumber"];
     $_SESSION["zipcode"] = $_POST["zipcode"];
 }
 
@@ -180,6 +200,30 @@ if (!empty($alerts)) {
     }
 }
 
+// DISPLAY ALREADY ORDERED
+
+if (!isset($_COOKIE["sum"])){
+    if(!empty($checked)){
+        $totalValue = array_sum($checked);
+        setcookie("sum", strval($totalValue), time()+(365*24*60*60));
+    }
+    else {
+        $totalValue = '0';
+        setcookie("sum", strval($totalValue), time()+(365*24*60*60));
+    }
+}
+else {
+    if (!empty($checked)){
+        $totalValue = $_COOKIE["sum"] + array_sum($checked);
+        setcookie("sum", strval($totalValue), time()+(365*24*60*60));
+    }
+    else{
+        $totalValue = $_COOKIE["sum"];
+        setcookie("sum", strval($totalValue), time()+(365*24*60*60));
+    }
+}
 
 
 require 'form-view.php';
+
+
